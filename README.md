@@ -7,7 +7,6 @@
 - MySQL
 - Redis
 - Docker
-- Vue.js
 
 ## アーキテクチャ
 [オニオンアーキテクチャ](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)をベースとした設計とする
@@ -31,3 +30,7 @@
 | Infrastructure      | com.book.manager.infrastructure |
 | Application Service | com.book.manager.application    |
 | Domain      | com.book.manager.domain         |
+
+### フロントエンドのリポジトリ
+
+https://github.com/Tomoya185-miyawaki/book-manager-front
