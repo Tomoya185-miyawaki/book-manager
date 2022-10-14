@@ -9,7 +9,7 @@ import com.book.manager.infrastructure.database.mapper.UserDynamicSqlSupport.nam
 import com.book.manager.infrastructure.database.mapper.UserDynamicSqlSupport.password
 import com.book.manager.infrastructure.database.mapper.UserDynamicSqlSupport.roleType
 import com.book.manager.infrastructure.database.mapper.UserDynamicSqlSupport.user
-import com.book.manager.infrastructure.database.record.User
+import com.book.manager.infrastructure.database.record.UserRecord
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Result
 import org.apache.ibatis.annotations.ResultMap
@@ -38,7 +38,7 @@ import org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper
 import org.mybatis.dynamic.sql.util.mybatis3.CommonUpdateMapper
 
 @Mapper
-interface UserMapper : CommonCountMapper, CommonDeleteMapper, CommonInsertMapper<User>, CommonUpdateMapper {
+interface UserMapper : CommonCountMapper, CommonDeleteMapper, CommonInsertMapper<UserRecord>, CommonUpdateMapper {
     @SelectProvider(type=SqlProviderAdapter::class, method="select")
     @Results(id="UserResult", value = [
         Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
@@ -47,11 +47,11 @@ interface UserMapper : CommonCountMapper, CommonDeleteMapper, CommonInsertMapper
         Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
         Result(column="role_type", property="roleType", typeHandler=EnumTypeHandler::class, jdbcType=JdbcType.CHAR)
     ])
-    fun selectMany(selectStatement: SelectStatementProvider): List<User>
+    fun selectMany(selectStatement: SelectStatementProvider): List<UserRecord>
 
     @SelectProvider(type=SqlProviderAdapter::class, method="select")
     @ResultMap("UserResult")
-    fun selectOne(selectStatement: SelectStatementProvider): User?
+    fun selectOne(selectStatement: SelectStatementProvider): UserRecord?
 }
 
 fun UserMapper.count(completer: CountCompleter) =
@@ -65,7 +65,7 @@ fun UserMapper.deleteByPrimaryKey(id_: Long) =
         where { id isEqualTo id_ }
     }
 
-fun UserMapper.insert(row: User) =
+fun UserMapper.insert(row: UserRecord) =
     insert(this::insert, row, user) {
         map(id) toProperty "id"
         map(email) toProperty "email"
@@ -74,7 +74,7 @@ fun UserMapper.insert(row: User) =
         map(roleType) toProperty "roleType"
     }
 
-fun UserMapper.insertMultiple(records: Collection<User>) =
+fun UserMapper.insertMultiple(records: Collection<UserRecord>) =
     insertMultiple(this::insertMultiple, records, user) {
         map(id) toProperty "id"
         map(email) toProperty "email"
@@ -83,10 +83,10 @@ fun UserMapper.insertMultiple(records: Collection<User>) =
         map(roleType) toProperty "roleType"
     }
 
-fun UserMapper.insertMultiple(vararg records: User) =
+fun UserMapper.insertMultiple(vararg records: UserRecord) =
     insertMultiple(records.toList())
 
-fun UserMapper.insertSelective(row: User) =
+fun UserMapper.insertSelective(row: UserRecord) =
     insert(this::insert, row, user) {
         map(id).toPropertyWhenPresent("id", row::id)
         map(email).toPropertyWhenPresent("email", row::email)
@@ -114,7 +114,7 @@ fun UserMapper.selectByPrimaryKey(id_: Long) =
 fun UserMapper.update(completer: UpdateCompleter) =
     update(this::update, user, completer)
 
-fun KotlinUpdateBuilder.updateAllColumns(row: User) =
+fun KotlinUpdateBuilder.updateAllColumns(row: UserRecord) =
     apply {
         set(id) equalToOrNull row::id
         set(email) equalToOrNull row::email
@@ -123,7 +123,7 @@ fun KotlinUpdateBuilder.updateAllColumns(row: User) =
         set(roleType) equalToOrNull row::roleType
     }
 
-fun KotlinUpdateBuilder.updateSelectiveColumns(row: User) =
+fun KotlinUpdateBuilder.updateSelectiveColumns(row: UserRecord) =
     apply {
         set(id) equalToWhenPresent row::id
         set(email) equalToWhenPresent row::email
@@ -132,7 +132,7 @@ fun KotlinUpdateBuilder.updateSelectiveColumns(row: User) =
         set(roleType) equalToWhenPresent row::roleType
     }
 
-fun UserMapper.updateByPrimaryKey(row: User) =
+fun UserMapper.updateByPrimaryKey(row: UserRecord) =
     update {
         set(email) equalToOrNull row::email
         set(password) equalToOrNull row::password
@@ -141,7 +141,7 @@ fun UserMapper.updateByPrimaryKey(row: User) =
         where { id isEqualTo row.id!! }
     }
 
-fun UserMapper.updateByPrimaryKeySelective(row: User) =
+fun UserMapper.updateByPrimaryKeySelective(row: UserRecord) =
     update {
         set(email) equalToWhenPresent row::email
         set(password) equalToWhenPresent row::password
